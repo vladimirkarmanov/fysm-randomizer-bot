@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  bot:
+    container_name: bot
+    restart: always
+    build: ./
+    command: bash -c "while !</dev/tcp/db/5432; do sleep 1; done; python migrate.py && python load_fixtures.py && python polling.py"
+    depends_on:
+      - redis
+    env_file:
+      - ./.env.local
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel debug --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    env_file:
+      - ./.env.local
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+    volumes:
+      - fysm-randomizer-redis-data:/data
+
+volumes:
+  fysm-randomizer-redis-data:
