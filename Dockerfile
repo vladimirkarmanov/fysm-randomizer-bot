@@ -14,5 +14,4 @@ ENV WORKDIR=/
 
 WORKDIR $WORKDIR
 
-COPY ./media /media
 COPY ./bot $WORKDIR

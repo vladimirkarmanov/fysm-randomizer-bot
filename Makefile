@@ -1,4 +1,4 @@
-SHELL := /bin/bash
+SHELL := /bin/zsh
 
 
 docker:
@@ -6,3 +6,6 @@ docker:
 
 deploy:
 	/bin/bash deploy.sh
+
+polling:
+	python ./bot/polling.py

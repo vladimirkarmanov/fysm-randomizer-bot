@@ -1,5 +1,3 @@
-from random import choice, sample
-
 from aiogram import F
 from aiogram import types, Router
 from aiogram.filters import Command
@@ -7,17 +5,14 @@ from aiogram.filters import Command
 from callbacks.fysm import FYSMLevelCallback, CoreModuleCallback
 from commands.base import commands
 from constants.fysm import (
-    zero_modules,
-    zero_modes,
     core_practice_modules,
-    games,
-    core_practice_modes,
-    zero_games,
 )
 from core.deps import get_settings
 from keyboards.common import get_inline_keyboard
 from schemas.keyboard import ButtonSchema
 from utils.message import update_text_message
+from services.randomizer import randomizer_service
+
 
 router = Router()
 settings = get_settings()
@@ -61,24 +56,7 @@ async def random_fysm_level(callback: types.CallbackQuery, callback_data: CoreMo
     core_module_name = callback_data.module_name
     fysm_level = callback_data.prev_callback_data
 
-    zero_module = choice(zero_modules)
-    zero_mode = choice(zero_modes[zero_module['name']])
-    zero_game = choice(zero_games[zero_module['name']])
-    if core_module_name == 'random':
-        core_module_name = choice(list(core_practice_modules.keys()))
-
-    core_practice_module = core_practice_modules[core_module_name]
-    number_of_games = core_practice_module['number_of_games']
-
-    games_for_practice = sample(games[fysm_level], number_of_games)
-    modes_for_practice = [choice(core_practice_modes) for _ in range(number_of_games)]
-
-    core_practice = ''
-    for game, mode in zip(games_for_practice, modes_for_practice):
-        core_practice += f'{game} - {mode}\n'
-
-    text = (f'<b>Включение:</b>\n{zero_game} - {zero_mode}\n\n'
-            f'<b>Основная часть:</b>\n{core_practice}')
+    text = randomizer_service.get_random_practice(core_module_name, fysm_level)
     await update_text_message(message=callback.message,
                               new_value=text,
                               keyboard=None)

@@ -1,4 +1,4 @@
-from pydantic import SecretStr, DirectoryPath
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings
 
 
@@ -19,9 +19,6 @@ class Settings(BaseSettings):
     REDIS_KEY_EX: int
 
     RATE_LIMIT: int
-
-    # media files
-    MEDIA_URL: DirectoryPath
 
     @property
     def is_dev(self):

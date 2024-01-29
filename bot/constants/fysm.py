@@ -31,6 +31,11 @@ zero_games = {
     ]
 }
 
+hard_zero_modes = {
+    'static': ['16', '20', '24'],
+    'dynamic': ['4x16', '8x8', '8x12'],
+}
+
 core_practice_modules = {
     'base': {
         'number_of_games': 1
@@ -49,6 +54,8 @@ core_practice_modules = {
 core_practice_modes = [
     '1x8', '1x18', '2x4', '2x8', '4x2', '4x4'
 ]
+
+normal_core_practice_modes = ['1x8', '2x4', '4x2']
 
 games_by_level = {
     'level_1': [
