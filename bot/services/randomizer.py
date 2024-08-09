@@ -1,17 +1,17 @@
-from services.base import BaseService
-from random import choice, sample
 from dataclasses import dataclass
+from random import choice, sample
 
 from constants.fysm import (
-    zero_modules,
-    zero_modes,
+    core_practice_modes,
     core_practice_modules,
     games,
-    core_practice_modes,
-    zero_games,
     hard_zero_modes,
     normal_core_practice_modes,
+    zero_games,
+    zero_modes,
+    zero_modules,
 )
+from services.base import BaseService
 
 
 @dataclass
@@ -23,8 +23,7 @@ class Zero:
 
 class RandomizerService(BaseService):
 
-    def _get_random_zero(self) -> Zero:
-        module_name = choice(zero_modules)['name']
+    def _get_random_zero(self, module_name: str) -> Zero:
         mode = choice(zero_modes[module_name])
         game = choice(zero_games[module_name])
 
@@ -36,17 +35,19 @@ class RandomizerService(BaseService):
 
     def get_random_practice(
         self,
-        core_module_name: str,
+        zero_module: str,
         fysm_level: str,
+        core_module: str,
     ) -> str:
-        zero = self._get_random_zero()
+        if zero_module == 'random':
+            zero_module = choice(zero_modules)['name']
 
-        if core_module_name == 'random':
-            core_module_name = choice(list(core_practice_modules.keys()))
+        if core_module == 'random':
+            core_module = choice(list(core_practice_modules.keys()))
 
-        number_of_games = core_practice_modules[core_module_name]['number_of_games']
-
+        number_of_games = core_practice_modules[core_module]['number_of_games']
         games_for_practice = sample(games[fysm_level], number_of_games)
+        zero = self._get_random_zero(zero_module)
 
         if zero.mode in hard_zero_modes[zero.module_name]:
             modes_for_practice = [choice(normal_core_practice_modes) for _ in range(number_of_games)]
@@ -57,8 +58,7 @@ class RandomizerService(BaseService):
         for game, mode in zip(games_for_practice, modes_for_practice):
             core_practice += f'{game} - {mode}\n'
 
-        text = (f'<b>Включение:</b>\n{zero.game} - {zero.mode}\n\n'
-                f'<b>Основная часть:</b>\n{core_practice}')
+        text = f'<b>Включение:</b>\n{zero.game} - {zero.mode}\n\n' f'<b>Основная часть:</b>\n{core_practice}'
         return text
 
 
