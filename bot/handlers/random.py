@@ -23,11 +23,11 @@ settings = get_settings()
 async def random_fysm_level(message: types.Message):
     buttons = [ButtonSchema(text='FYSM 1',
                             callback_data=FYSMLevelCallback(callback_name='fysm_level', level='level_1')),
-               ButtonSchema(text='FYSM 1 + Эпизоды',
-                            callback_data=FYSMLevelCallback(callback_name='fysm_level', level='level_1_episodes')),
                ButtonSchema(text='FYSM 2',
-                            callback_data=FYSMLevelCallback(callback_name='fysm_level', level='level_2'))]
-    await message.answer(text='Ваш уровень FYSM?',
+                            callback_data=FYSMLevelCallback(callback_name='fysm_level', level='level_2')),
+               ButtonSchema(text='FYSM 1 + FYSM 2',
+                            callback_data=FYSMLevelCallback(callback_name='fysm_level', level='level_1_and_2'))]
+    await message.answer(text='Выберите уровень FYSM',
                          parse_mode='HTML',
                          reply_markup=get_inline_keyboard(buttons))
 

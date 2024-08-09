@@ -68,8 +68,6 @@ games_by_level = {
         'Спинные экзерсисы',
         'Мэнс хелз',
         'Вумэнс хелз',
-    ],
-    'level_1_episodes': [
         'Азы плотности',
         'Структуризация',
         'Баланс и сила',
@@ -97,11 +95,29 @@ games_by_level = {
         'Ошеломляющая безмятежность',
         'Геометрия потока',
         'Однажды',
+        'Стан',
+        'Пот',
+        'Леер',
+        'Лесенка',
+        'Вязь',
+        'Выход',
+        'Раскинуться',
+        'Сдвиг',
+        'Визит',
+        'Платформа',
+        'Флюгер',
+        'Мягкость',
+        'Асимметрия',
+        'Классика',
+        'Орнамент',
+        'Терпение',
+        'Вереница',
+        'Перелив №1',
     ]
 }
 
 games = {
     'level_1': games_by_level['level_1'],
-    'level_1_episodes': [*games_by_level['level_1'], *games_by_level['level_1_episodes']],
-    'level_2': [*games_by_level['level_1'], *games_by_level['level_1_episodes'], *games_by_level['level_2']],
+    'level_2': games_by_level['level_2'],
+    'level_1_and_2': [*games_by_level['level_1'], *games_by_level['level_2']],
 }
