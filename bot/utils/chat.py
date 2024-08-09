@@ -1,4 +1,4 @@
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import CallbackQuery, Message
 
 
 def is_private_chat(event: Message | CallbackQuery) -> bool:

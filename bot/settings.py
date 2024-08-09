@@ -22,8 +22,8 @@ class Settings(BaseSettings):
 
     @property
     def is_dev(self):
-        return self.ENVIRONMENT == "development"
+        return self.ENVIRONMENT == 'development'
 
     @property
     def is_prod(self):
-        return self.ENVIRONMENT == "production"
+        return self.ENVIRONMENT == 'production'

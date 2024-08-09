@@ -1,19 +1,19 @@
-from typing import Callable, Dict, Any, Awaitable
+from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
-from aiogram.types import TelegramObject, CallbackQuery, Message
+from aiogram.types import CallbackQuery, Message, TelegramObject
 from aiogram.utils.chat_action import ChatActionSender
 
 
 class ChatActionMiddleware(BaseMiddleware):
     async def __call__(
-            self,
-            handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-            event: Message | CallbackQuery,
-            data: Dict[str, Any]
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: Message | CallbackQuery,
+        data: Dict[str, Any],
     ) -> Any:
-        long_operation_type = get_flag(data, "long_operation")
+        long_operation_type = get_flag(data, 'long_operation')
 
         if not long_operation_type:
             return await handler(event, data)
@@ -25,8 +25,5 @@ class ChatActionMiddleware(BaseMiddleware):
         else:
             chat_id = event.from_user.id
 
-        async with ChatActionSender(
-                action=long_operation_type,
-                chat_id=chat_id
-        ):
+        async with ChatActionSender(action=long_operation_type, chat_id=chat_id):
             return await handler(event, data)

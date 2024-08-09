@@ -7,7 +7,7 @@ settings = Settings()
 
 
 def get_logger() -> Logger:
-    return logging.getLogger("bot")
+    return logging.getLogger('bot')
 
 
 def get_settings() -> Settings:

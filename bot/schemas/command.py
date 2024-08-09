@@ -7,4 +7,4 @@ class CommandSchema(BaseModel):
 
     @property
     def telegram_command(self):
-        return f"/{self.command}"
+        return f'/{self.command}'

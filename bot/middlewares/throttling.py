@@ -1,11 +1,9 @@
-from typing import Callable, Dict, Any, Awaitable
+from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware
-from aiogram.types import Message
-from aiogram.types import TelegramObject
-
+from aiogram.types import Message, TelegramObject
 from core.deps import get_settings
-from storages.redis import redis_storage, RedisStorage
+from storages.redis import RedisStorage, redis_storage
 
 settings = get_settings()
 
@@ -16,10 +14,7 @@ class ThrottlingMiddleware(BaseMiddleware):
         self.storage = storage
 
     async def __call__(
-            self,
-            handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-            event: Message,
-            data: Dict[str, Any]
+        self, handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]], event: Message, data: Dict[str, Any]
     ) -> Any:
         user_key = f'throttling:{event.from_user.id}'
 

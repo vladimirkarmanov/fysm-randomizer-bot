@@ -7,7 +7,7 @@ class UserService(BaseService):
 
     def __init__(self, *args, **kwargs):
         super().__init__()
-        self.redis_prefix = "user"
+        self.redis_prefix = 'user'
         self.redis_storage = redis_storage
 
     @property

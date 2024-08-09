@@ -3,8 +3,8 @@ class InnerException(Exception):
 
 
 class NotFound(InnerException):
-    msg = "Не найдено"
+    msg = 'Не найдено'
 
 
 class InternalServerError(InnerException):
-    msg = "Что-то пошло не так"
+    msg = 'Что-то пошло не так'

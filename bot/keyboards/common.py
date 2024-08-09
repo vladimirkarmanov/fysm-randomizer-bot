@@ -1,15 +1,16 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
-
 from schemas.keyboard import ButtonSchema
 
 
 def get_inline_keyboard(buttons: list[ButtonSchema], row_size: int = 1) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for b in buttons:
-        inline_button = InlineKeyboardButton(text=b.text,
-                                             callback_data=b.callback_data.pack() if b.callback_data else None,
-                                             url=str(b.url) if b.url else None)
+        inline_button = InlineKeyboardButton(
+            text=b.text,
+            callback_data=b.callback_data.pack() if b.callback_data else None,
+            url=str(b.url) if b.url else None,
+        )
         builder.add(inline_button)
 
     builder.adjust(row_size)
@@ -17,11 +18,8 @@ def get_inline_keyboard(buttons: list[ButtonSchema], row_size: int = 1) -> Inlin
 
 
 def get_main_menu_keyboard(buttons: list[ButtonSchema], row_size: int = 1) -> ReplyKeyboardMarkup:
-    buttons = [
-        KeyboardButton(text=b.text) for b in buttons
-    ]
+    buttons = [KeyboardButton(text=b.text) for b in buttons]
     builder = ReplyKeyboardBuilder()
     builder.add(*buttons)
     builder.adjust(row_size)
     return builder.as_markup(resize_keyboard=True)
-

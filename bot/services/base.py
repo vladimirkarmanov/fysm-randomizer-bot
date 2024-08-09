@@ -1,14 +1,14 @@
 from logging import Logger
 
-from core.deps import get_settings, get_logger
+from core.deps import get_logger, get_settings
 from settings import Settings
 
 
 class BaseService:
     def __init__(
-            self,
-            logger: Logger = get_logger(),
-            settings: Settings = get_settings(),
+        self,
+        logger: Logger = get_logger(),
+        settings: Settings = get_settings(),
     ):
         self.logger = logger
         self.settings = settings
