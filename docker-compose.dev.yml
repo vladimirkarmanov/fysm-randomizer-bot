@@ -1,12 +1,13 @@
 services:
   bot:
-    image: localhost:5000/fysm-randomizer-bot:latest
+    container_name: bot
     restart: always
+    build: ./
     command: bash -c "python polling.py"
     depends_on:
       - redis
     env_file:
-      - ./.env
+      - ./.env.local
 
   redis:
     image: redis:alpine
@@ -15,7 +16,7 @@ services:
       - "6379:6379"
     command: redis-server --save 20 1 --loglevel debug --requirepass ${REDIS_PASSWORD}
     env_file:
-      - ./.env
+      - ./.env.local
     healthcheck:
       test: [ "CMD", "redis-cli","ping" ]
     volumes:
