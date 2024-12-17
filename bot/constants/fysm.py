@@ -2,33 +2,32 @@ from core.deps import get_settings
 
 settings = get_settings()
 
-zero_modules = [
-    {
-        'name': 'static',
-        'name_ru': 'Короткая статика'
-    },
-    {
-        'name': 'dynamic',
-        'name_ru': 'Статодинамика'
-    }
-]
+zero_modules = [{'name': 'static', 'name_ru': 'Короткая статика'}, {'name': 'dynamic', 'name_ru': 'Статодинамика'}]
 
-zero_modes = {
-    'static': [
-        '8', '12', '16', '20', '24'
-    ],
-    'dynamic': [
-        '4x8', '4x12', '4x16', '8x4', '8x8', '8x12'
-    ]
-}
+zero_modes = {'static': ['8', '12', '16', '20', '24'], 'dynamic': ['4x8', '4x12', '4x16', '8x4', '8x8', '8x12']}
 
 zero_games = {
     'static': [
-        'ON 1', 'ON 2', 'ON 3', 'ON 4', 'ON 5'
+        'ON 1',
+        'ON 2',
+        'ON 3',
+        'ON 4',
+        'ON 5',
+        'ON 6',
+        'ON 7',
+        'ON 8',
+        'ON 9',
+        'ON 10',
+        'ON 11',
+        'ON 12',
+        'ON 13',
+        'ON 14',
+        'ON 15',
+        'ON 16',
+        'ON 17',
+        'ON 18',
     ],
-    'dynamic': [
-        'ZERO 1', 'ZERO 2', 'ZERO 3', 'ZERO 4', 'ZERO 5', 'ZERO 6', 'ZERO 7', 'ZERO 8', 'ZERO 9'
-    ]
+    'dynamic': ['ZERO 1', 'ZERO 2', 'ZERO 3', 'ZERO 4', 'ZERO 5', 'ZERO 6', 'ZERO 7', 'ZERO 8', 'ZERO 9'],
 }
 
 hard_zero_modes = {
@@ -37,23 +36,13 @@ hard_zero_modes = {
 }
 
 core_practice_modules = {
-    'base': {
-        'number_of_games': 1
-    },
-    'dense': {
-        'number_of_games': 2
-    },
-    'grand': {
-        'number_of_games': 3
-    },
-    'mortal': {
-        'number_of_games': 4
-    },
+    'base': {'number_of_games': 1},
+    'dense': {'number_of_games': 2},
+    'grand': {'number_of_games': 3},
+    'mortal': {'number_of_games': 4},
 }
 
-core_practice_modes = [
-    '1x8', '1x18', '2x4', '2x8', '4x2', '4x4'
-]
+core_practice_modes = ['1x8', '1x18', '2x4', '2x8', '4x2', '4x4']
 
 normal_core_practice_modes = ['1x8', '2x4', '4x2']
 
@@ -76,6 +65,7 @@ games_by_level = {
         'Уплотнение',
         'Открытие',
         'Железно',
+        'Предлог',
         'Корни',
         'Стыковка',
         'Грация',
@@ -84,6 +74,7 @@ games_by_level = {
         'Разворот',
         'Компенсация',
         'Мирный воин',
+        'Сахар',
     ],
     'level_2': [
         'Ревизия',
@@ -113,7 +104,7 @@ games_by_level = {
         'Терпение',
         'Вереница',
         'Перелив №1',
-    ]
+    ],
 }
 
 games = {
