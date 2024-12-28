@@ -4,11 +4,12 @@ from sqlalchemy import select
 
 from models.user import User
 from repositories.base import BaseRepository
+from schemas.user import UserSchema
 
 
 class UserRepository(BaseRepository[User]):
-    async def create(self, user: User) -> User:
-        return await self.save(user)
+    async def create(self, user: UserSchema) -> User:
+        return await self.save(User(**user.__dict__))
 
     async def get(self, id: int) -> User | None:
         statement = select(User).where(User.id == id)

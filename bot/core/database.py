@@ -1,11 +1,8 @@
-import asyncio
 import logging
-import uuid
-from typing import AsyncGenerator, Callable
+from typing import Callable
 
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
-from sqlalchemy.exc import DBAPIError
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -30,25 +27,3 @@ def create_sessions(
 
 engine, async_engine = create_engines(settings)
 create_session, create_async_session = create_sessions(engine, async_engine)
-
-
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    session = create_async_session()
-    xid = uuid.uuid4()
-    try:
-        logger.debug(f'[{xid}] Transaction BEGIN;')
-        yield session
-        await session.commit()
-        logger.debug(f'[{xid}] Transaction COMMIT;')
-    except DBAPIError as e:
-        await session.rollback()
-        logger.error(f'[{xid}] Transaction ROLLBACK; (Database Error)')
-        raise e
-    except Exception:
-        await session.rollback()
-        logger.error(f'[{xid}] Transaction ROLLBACK; (Application Error)')
-        raise
-    finally:
-        if session:
-            await asyncio.shield(session.close())
-            logger.debug(f'[{xid}] Connection released to pool')

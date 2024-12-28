@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class UserSchema(BaseModel):
-    telegram_id: int
+    id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -7,4 +7,3 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(BigInteger, primary_key=True, index=True)
-    telegram_id = Column(BigInteger, unique=True)

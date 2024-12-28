@@ -1,5 +1,4 @@
 import logging
-from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,17 +12,18 @@ class UserService:
     def __init__(self, session: AsyncSession):
         self.repository = UserRepository(session)
 
-    async def create(self, user: UserSchema) -> UserSchema:
-        user = await self.repository.create(**user.__dict__)
+    async def get_or_create(self, user: UserSchema) -> UserSchema:
+        existing_user = await self.get(user.id)
+        if existing_user:
+            return UserSchema(**existing_user.__dict__)
+
+        user = await self.repository.create(user)
         return user
 
-    async def get(self, id: int) -> UserSchema:
+    async def get(self, id: int) -> UserSchema | None:
         user = await self.repository.get(id)
-        return UserSchema(**user.__dict__)
+        return UserSchema(**user.__dict__) if user else None
 
     async def get_all(self, limit: int, offset: int) -> list[UserSchema]:
         users = await self.repository.get_all(limit, offset)
         return [UserSchema(**u.__dict__) for u in users]
-
-    async def update(self, id: int, **fields: dict[str, Any]):
-        pass

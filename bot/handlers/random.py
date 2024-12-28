@@ -1,12 +1,16 @@
 from aiogram import F, Router, types
 from aiogram.filters import Command
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from callbacks.fysm import CoreModuleCallback, FYSMLevelCallback, ZeroModuleCallback
 from commands.base import commands
 from constants.fysm import core_practice_modules
+from core.decorators import db_session
 from keyboards.common import get_inline_keyboard
 from schemas.keyboard import ButtonSchema
+from schemas.user import UserSchema
 from services.randomizer import RandomizerService
+from services.user import UserService
 from utils.message import update_text_message
 
 router = Router()
@@ -87,12 +91,19 @@ async def random_core_module(callback: types.CallbackQuery, callback_data: FYSML
 
 
 @router.callback_query(CoreModuleCallback.filter(F.callback_name == 'core_module'))
-async def random_fysm_response(callback: types.CallbackQuery, callback_data: CoreModuleCallback):
+@db_session(commit=True)
+async def random_fysm_response(
+    callback: types.CallbackQuery,
+    callback_data: CoreModuleCallback,
+    *,
+    db_session: AsyncSession,
+):
     zero_module = callback_data.zero_module
     fysm_level = callback_data.fysm_level
     core_module = callback_data.core_module
 
     text = RandomizerService().get_random_practice(zero_module, fysm_level, core_module)
     await update_text_message(message=callback.message, new_value=text, keyboard=None)
-
     await callback.answer()
+
+    await UserService(db_session).get_or_create(UserSchema(id=callback.from_user.id))
