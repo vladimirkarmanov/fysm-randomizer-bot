@@ -4,14 +4,12 @@ from aiogram.filters import Command
 from callbacks.fysm import CoreModuleCallback, FYSMLevelCallback, ZeroModuleCallback
 from commands.base import commands
 from constants.fysm import core_practice_modules
-from core.deps import get_settings
 from keyboards.common import get_inline_keyboard
 from schemas.keyboard import ButtonSchema
 from services.randomizer import RandomizerService
 from utils.message import update_text_message
 
 router = Router()
-settings = get_settings()
 
 
 @router.message(Command(commands['random'].command))

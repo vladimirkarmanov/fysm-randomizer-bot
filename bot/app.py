@@ -12,10 +12,10 @@ from errors.exceptions import InnerException
 from middlewares.chat import IsPrivateUserChatMiddleware
 from middlewares.chat_action import ChatActionMiddleware
 from middlewares.throttling import ThrottlingMiddleware
-from settings import Settings
+from settings import settings
 
-settings = Settings()
-logger = logging.getLogger('bot')
+logger = logging.getLogger(__name__)
+
 formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
 
 stream_handler = logging.StreamHandler()

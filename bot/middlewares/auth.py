@@ -3,10 +3,7 @@ from typing import Any, Awaitable, Callable, Dict
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject
 
-from core.deps import get_settings
 from utils.auth import is_user_admin, is_user_chat_member
-
-settings = get_settings()
 
 
 class IsChatMemberMiddleware(BaseMiddleware):

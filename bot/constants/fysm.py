@@ -1,7 +1,3 @@
-from core.deps import get_settings
-
-settings = get_settings()
-
 zero_modules = [{'name': 'static', 'name_ru': 'Короткая статика'}, {'name': 'dynamic', 'name_ru': 'Статодинамика'}]
 
 zero_modes = {'static': ['8', '12', '16', '20', '24'], 'dynamic': ['4x8', '4x12', '4x16', '8x4', '8x8', '8x12']}
