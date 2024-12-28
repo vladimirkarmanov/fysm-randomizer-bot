@@ -13,6 +13,7 @@
 pylintrc
 **.db
 **.env
-.env.local
+.env
 deploy.sh
 media
+data

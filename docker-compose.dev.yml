@@ -3,7 +3,7 @@ services:
     container_name: bot
     restart: always
     build: ./
-    command: bash -c "python polling.py"
+    command: bash -c "uv run migrate.py && uv run polling.py"
     depends_on:
       - redis
     env_file:

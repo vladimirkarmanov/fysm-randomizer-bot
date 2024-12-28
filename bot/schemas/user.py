@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 
 
-class UserDataSchema(BaseModel):
-    history: str
+class UserSchema(BaseModel):
+    telegram_id: int
+
+    class Config:
+        orm_mode = True
