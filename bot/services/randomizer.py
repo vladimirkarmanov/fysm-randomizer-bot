@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from random import choice, sample
 
@@ -11,7 +12,8 @@ from constants.fysm import (
     zero_modes,
     zero_modules,
 )
-from services.base import BaseService
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -21,7 +23,7 @@ class Zero:
     game: str
 
 
-class RandomizerService(BaseService):
+class RandomizerService:
     def _get_random_zero(self, module_name: str) -> Zero:
         mode = choice(zero_modes[module_name])
         game = choice(zero_games[module_name])
@@ -59,6 +61,3 @@ class RandomizerService(BaseService):
 
         text = f'<b>Включение:</b>\n{zero.game} - {zero.mode}\n\n' f'<b>Основная часть:</b>\n{core_practice}'
         return text
-
-
-randomizer_service = RandomizerService()

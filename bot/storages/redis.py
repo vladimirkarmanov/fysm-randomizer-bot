@@ -81,6 +81,3 @@ class RedisStorage(BaseStorage):
             return wrapper
 
         return decorator
-
-
-redis_storage = RedisStorage()

@@ -7,7 +7,7 @@ from constants.fysm import core_practice_modules
 from core.deps import get_settings
 from keyboards.common import get_inline_keyboard
 from schemas.keyboard import ButtonSchema
-from services.randomizer import randomizer_service
+from services.randomizer import RandomizerService
 from utils.message import update_text_message
 
 router = Router()
@@ -94,7 +94,7 @@ async def random_fysm_response(callback: types.CallbackQuery, callback_data: Cor
     fysm_level = callback_data.fysm_level
     core_module = callback_data.core_module
 
-    text = randomizer_service.get_random_practice(zero_module, fysm_level, core_module)
+    text = RandomizerService().get_random_practice(zero_module, fysm_level, core_module)
     await update_text_message(message=callback.message, new_value=text, keyboard=None)
 
     await callback.answer()

@@ -1,11 +1,13 @@
+import logging
+
 from schemas.user import UserDataSchema
-from services.base import BaseService
-from storages.redis import RedisStorage, redis_storage
+from storages.redis import RedisStorage
+
+logger = logging.getLogger(__name__)
 
 
-class UserService(BaseService):
-    def __init__(self, *args, **kwargs):
-        super().__init__()
+class UserService:
+    def __init__(self, redis_storage: RedisStorage):
         self.redis_prefix = 'user'
         self.redis_storage = redis_storage
 
@@ -26,6 +28,3 @@ class UserService(BaseService):
         if len(user_data.keys()) > 0:
             return UserDataSchema(**user_data)
         return None
-
-
-user_service = UserService(_redis_storage=redis_storage)
