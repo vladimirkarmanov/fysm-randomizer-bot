@@ -2,6 +2,7 @@ import logging
 
 from aiogram import Bot
 from aiogram.types import BotCommand
+
 from app import bot, dp
 
 

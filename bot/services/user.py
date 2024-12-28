@@ -4,7 +4,6 @@ from storages.redis import RedisStorage, redis_storage
 
 
 class UserService(BaseService):
-
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.redis_prefix = 'user'

@@ -1,5 +1,6 @@
 from aiogram import F, Router, types
 from aiogram.filters import Command
+
 from callbacks.fysm import CoreModuleCallback, FYSMLevelCallback, ZeroModuleCallback
 from commands.base import commands
 from constants.fysm import core_practice_modules
@@ -88,7 +89,7 @@ async def random_core_module(callback: types.CallbackQuery, callback_data: FYSML
 
 
 @router.callback_query(CoreModuleCallback.filter(F.callback_name == 'core_module'))
-async def random_fysm_level(callback: types.CallbackQuery, callback_data: CoreModuleCallback):
+async def random_fysm_response(callback: types.CallbackQuery, callback_data: CoreModuleCallback):
     zero_module = callback_data.zero_module
     fysm_level = callback_data.fysm_level
     core_module = callback_data.core_module

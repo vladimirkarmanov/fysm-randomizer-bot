@@ -22,7 +22,6 @@ class Zero:
 
 
 class RandomizerService(BaseService):
-
     def _get_random_zero(self, module_name: str) -> Zero:
         mode = choice(zero_modes[module_name])
         game = choice(zero_games[module_name])

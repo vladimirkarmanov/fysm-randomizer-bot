@@ -2,6 +2,7 @@ from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject
+
 from core.deps import get_settings
 from storages.redis import RedisStorage, redis_storage
 
@@ -9,7 +10,6 @@ settings = get_settings()
 
 
 class ThrottlingMiddleware(BaseMiddleware):
-
     def __init__(self, storage: RedisStorage = redis_storage):
         self.storage = storage
 

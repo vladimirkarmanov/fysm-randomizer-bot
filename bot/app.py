@@ -5,11 +5,13 @@ from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.fsm.strategy import FSMStrategy
 from aiogram.types import CallbackQuery, Message
 from aiogram.types.error_event import ErrorEvent
+from redis.asyncio.client import Redis
+from redis.asyncio.connection import ConnectionPool
+
 from errors.exceptions import InnerException
 from middlewares.chat import IsPrivateUserChatMiddleware
 from middlewares.chat_action import ChatActionMiddleware
 from middlewares.throttling import ThrottlingMiddleware
-from redis.asyncio.client import ConnectionPool, Redis
 from settings import Settings
 
 settings = Settings()

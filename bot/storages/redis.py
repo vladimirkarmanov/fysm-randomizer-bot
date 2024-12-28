@@ -1,13 +1,15 @@
 import pickle
 from functools import wraps
+from typing import Any
 
 import httpx
 from redis.asyncio import ConnectionPool, Redis
+
 from storages.base import BaseStorage
 
 
 class RedisStorage(BaseStorage):
-    excluded_types = []
+    excluded_types: list[Any] = []
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -35,7 +37,7 @@ class RedisStorage(BaseStorage):
     async def ttl(self, key: str) -> int:
         return await self.redis.ttl(key)
 
-    async def delete(self, key: str = None) -> int:
+    async def delete(self, key: str) -> int:
         return await self.redis.delete(key)
 
     async def close(self):
