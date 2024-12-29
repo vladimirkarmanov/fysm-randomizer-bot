@@ -3,21 +3,21 @@ from aiogram.filters import Command
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from callbacks.fysm import CoreModuleCallback, FYSMLevelCallback, ZeroModuleCallback
-from commands.base import commands
+from constants.commands import menu, side_menu
 from constants.fysm import core_practice_modules
 from core.decorators import db_session
-from keyboards.common import get_inline_keyboard
 from schemas.keyboard import ButtonSchema
 from schemas.user import UserSchema
 from services.randomizer import RandomizerService
 from services.user import UserService
+from utils.keyboard import get_inline_keyboard
 from utils.message import update_text_message
 
 router = Router()
 
 
-@router.message(Command(commands['random'].command))
-@router.message(F.text == 'Рандом')
+@router.message(Command(side_menu['random'].command))
+@router.message(F.text == menu['random'].button_text)
 async def random_fysm_zero(message: types.Message):
     buttons = [
         ButtonSchema(

@@ -7,10 +7,10 @@ from app import bot, dp
 
 
 async def set_commands(bot: Bot):
-    from commands.base import commands
+    from constants.commands import side_menu
 
     commands = [
-        BotCommand(command=command.telegram_command, description=command.button_text) for command in commands.values()
+        BotCommand(command=command.telegram_command, description=command.button_text) for command in side_menu.values()
     ]
     await bot.set_my_commands(commands)
 
