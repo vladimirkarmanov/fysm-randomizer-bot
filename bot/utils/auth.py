@@ -1,8 +1,7 @@
 from aiogram.exceptions import TelegramBadRequest
-from app import bot
-from core.deps import get_settings
 
-settings = get_settings()
+from app import bot
+from settings import settings
 
 
 async def is_user_chat_member(user_id: int) -> bool:
@@ -14,6 +13,8 @@ async def is_user_chat_member(user_id: int) -> bool:
             return True
     except TelegramBadRequest:
         return False
+
+    return False
 
 
 async def is_user_admin(user_id: int) -> bool:

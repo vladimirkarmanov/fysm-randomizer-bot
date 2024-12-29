@@ -1,5 +1,5 @@
 class InnerException(Exception):
-    msg = None
+    msg: str
 
 
 class NotFound(InnerException):

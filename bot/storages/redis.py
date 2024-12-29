@@ -1,21 +1,26 @@
+import logging
 import pickle
 from functools import wraps
+from typing import Any
 
 import httpx
 from redis.asyncio import ConnectionPool, Redis
+
+from settings import settings
 from storages.base import BaseStorage
+
+logger = logging.getLogger(__name__)
 
 
 class RedisStorage(BaseStorage):
-    excluded_types = []
+    excluded_types: list[Any] = []
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.redis = Redis(
             connection_pool=ConnectionPool(
-                host=self.settings.REDIS_HOST,
-                port=self.settings.REDIS_PORT,
-                password=self.settings.REDIS_PASSWORD.get_secret_value(),
+                host=settings.REDIS_HOST,
+                port=settings.REDIS_PORT,
+                password=settings.REDIS_PASSWORD.get_secret_value(),
                 decode_responses=True,
             )
         )
@@ -27,7 +32,7 @@ class RedisStorage(BaseStorage):
         return await self.redis.hgetall(key)
 
     async def set(self, key: str, value: int | str | bytes, ex: int | None = None):
-        return await self.redis.set(key, value, ex=ex if ex else self.settings.REDIS_KEY_EX)
+        return await self.redis.set(key, value, ex=ex if ex else settings.REDIS_KEY_EX)
 
     async def get(self, key: str) -> str | bytes | None:
         return await self.redis.get(key)
@@ -35,11 +40,11 @@ class RedisStorage(BaseStorage):
     async def ttl(self, key: str) -> int:
         return await self.redis.ttl(key)
 
-    async def delete(self, key: str = None) -> int:
+    async def delete(self, key: str) -> int:
         return await self.redis.delete(key)
 
     async def close(self):
-        self.logger.info('Closing RedisStorage connection...')
+        logger.info('Closing RedisStorage connection...')
         await self.redis.close()
 
     @staticmethod
@@ -50,7 +55,7 @@ class RedisStorage(BaseStorage):
         def decorator(func):
             @wraps(func)
             async def wrapper(*args, **kwargs):
-                if not self.settings.CACHE:
+                if not settings.CACHE:
                     return await func(*args, **kwargs)
                 if self_:
                     _args = args[1:]
@@ -65,20 +70,17 @@ class RedisStorage(BaseStorage):
                     result = await func(*args, **kwargs)
 
                     if isinstance(result, httpx.Response) and result.status_code >= 400:
-                        self.logger.info('Skipping cache result of httpx.Response with response_code >=400')
+                        logger.info('Skipping cache result of httpx.Response with response_code >=400')
                         return result
 
-                    self.logger.info(f'Didn\'t find result for key="{key}". Creating')
+                    logger.info(f'Didn\'t find result for key="{key}". Creating')
                     byte_result = pickle.dumps(result)
                     await self.set(key, byte_result, ex=ex)
                     return result
 
-                self.logger.info(f'Found cached result for key="{key}". Using it instead')
+                logger.info(f'Found cached result for key="{key}". Using it instead')
                 return pickle.loads(byte_result)  # noqa
 
             return wrapper
 
         return decorator
-
-
-redis_storage = RedisStorage()

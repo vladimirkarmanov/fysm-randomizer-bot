@@ -13,11 +13,15 @@ class Settings(BaseSettings):
     DEVELOPER_ID: int
 
     # database
+    DATABASE_PATH: str
+    SYNC_DATABASE_URL: str
+    ASYNC_DATABASE_URL: str
+
+    # redis
     REDIS_HOST: str
     REDIS_PORT: int
     REDIS_PASSWORD: SecretStr
     REDIS_KEY_EX: int
-
     RATE_LIMIT: int
 
     @property
@@ -27,3 +31,6 @@ class Settings(BaseSettings):
     @property
     def is_prod(self):
         return self.ENVIRONMENT == 'production'
+
+
+settings = Settings()

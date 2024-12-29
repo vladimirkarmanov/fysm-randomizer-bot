@@ -1,16 +1,15 @@
 from aiogram import Router, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from commands.base import commands
-from core.deps import get_settings
-from keyboards.common import get_main_menu_keyboard
+
+from constants.commands import side_menu
 from schemas.keyboard import ButtonSchema
+from utils.keyboard import get_main_menu_keyboard
 
 router = Router()
-settings = get_settings()
 
 
-@router.message(Command(commands['start'].command))
+@router.message(Command(side_menu['start'].command))
 async def start(message: types.Message, state: FSMContext):
     await state.clear()
     buttons = [ButtonSchema(text='Рандом')]

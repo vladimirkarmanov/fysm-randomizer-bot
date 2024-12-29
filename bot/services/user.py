@@ -1,32 +1,29 @@
-from schemas.user import UserDataSchema
-from services.base import BaseService
-from storages.redis import RedisStorage, redis_storage
+import logging
+
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from repositories.user import UserRepository
+from schemas.user import UserSchema
+
+logger = logging.getLogger(__name__)
 
 
-class UserService(BaseService):
+class UserService:
+    def __init__(self, session: AsyncSession):
+        self.repository = UserRepository(session)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        self.redis_prefix = 'user'
-        self.redis_storage = redis_storage
+    async def get_or_create(self, user: UserSchema) -> UserSchema:
+        existing_user = await self.get(user.id)
+        if existing_user:
+            return UserSchema(**existing_user.__dict__)
 
-    @property
-    def redis(self) -> RedisStorage:
-        return self.redis_storage
+        user = await self.repository.create(user)
+        return user
 
-    def _build_key(self, user_id: int):
-        return f'{self.redis_prefix}:{str(user_id)}'
+    async def get(self, id: int) -> UserSchema | None:
+        user = await self.repository.get(id)
+        return UserSchema(**user.__dict__) if user else None
 
-    async def save_user_data(self, user_id: int, user_data: UserDataSchema):
-        key = self._build_key(user_id)
-        await self.redis.hset(key, user_data.model_dump(exclude_unset=True))
-
-    async def get_user_data(self, user_id: int) -> UserDataSchema | None:
-        key = self._build_key(user_id)
-        user_data = await self.redis.hget(key)
-        if len(user_data.keys()) > 0:
-            return UserDataSchema(**user_data)
-        return None
-
-
-user_service = UserService(_redis_storage=redis_storage)
+    async def get_all(self, limit: int, offset: int) -> list[UserSchema]:
+        users = await self.repository.get_all(limit, offset)
+        return [UserSchema(**u.__dict__) for u in users]

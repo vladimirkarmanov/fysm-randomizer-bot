@@ -1,17 +1,10 @@
+import logging
+import random
 from dataclasses import dataclass
-from random import choice, sample
 
-from constants.fysm import (
-    core_practice_modes,
-    core_practice_modules,
-    games,
-    hard_zero_modes,
-    normal_core_practice_modes,
-    zero_games,
-    zero_modes,
-    zero_modules,
-)
-from services.base import BaseService
+from constants.fysm import core_practice_modes, core_practice_modules, games, zero_games, zero_modes, zero_modules
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -21,11 +14,14 @@ class Zero:
     game: str
 
 
-class RandomizerService(BaseService):
-
+class RandomizerService:
     def _get_random_zero(self, module_name: str) -> Zero:
-        mode = choice(zero_modes[module_name])
-        game = choice(zero_games[module_name])
+        mode = random.choices(
+            population=zero_modes[module_name]['values'],
+            weights=zero_modes[module_name]['weights'],
+            k=1,
+        )[0]
+        game = random.choice(zero_games[module_name])
 
         return Zero(
             module_name=module_name,
@@ -40,19 +36,20 @@ class RandomizerService(BaseService):
         core_module: str,
     ) -> str:
         if zero_module == 'random':
-            zero_module = choice(zero_modules)['name']
+            zero_module = random.choice(zero_modules)['name']
 
         if core_module == 'random':
-            core_module = choice(list(core_practice_modules.keys()))
+            core_module = random.choice(list(core_practice_modules.keys()))
 
         number_of_games = core_practice_modules[core_module]['number_of_games']
-        games_for_practice = sample(games[fysm_level], number_of_games)
+        games_for_practice = random.sample(games[fysm_level], number_of_games)
         zero = self._get_random_zero(zero_module)
 
-        if zero.mode in hard_zero_modes[zero.module_name]:
-            modes_for_practice = [choice(normal_core_practice_modes) for _ in range(number_of_games)]
-        else:
-            modes_for_practice = [choice(core_practice_modes) for _ in range(number_of_games)]
+        modes_for_practice = random.choices(
+            population=core_practice_modes['values'],
+            weights=core_practice_modes['weights'],
+            k=number_of_games,
+        )
 
         core_practice = ''
         for game, mode in zip(games_for_practice, modes_for_practice):
@@ -60,6 +57,3 @@ class RandomizerService(BaseService):
 
         text = f'<b>Включение:</b>\n{zero.game} - {zero.mode}\n\n' f'<b>Основная часть:</b>\n{core_practice}'
         return text
-
-
-randomizer_service = RandomizerService()

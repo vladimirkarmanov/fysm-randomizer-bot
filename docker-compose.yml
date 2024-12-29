@@ -2,11 +2,13 @@ services:
   bot:
     image: localhost:5000/fysm-randomizer-bot:latest
     restart: always
-    command: bash -c "python polling.py"
+    command: bash -c "uv run migrate.py && uv run polling.py"
     depends_on:
       - redis
     env_file:
       - ./.env
+    volumes:
+      - ./data:/data
 
   redis:
     image: redis:alpine

@@ -1,0 +1,24 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff
+        entry: ruff check
+        args: [--fix]
+        language: system
+        types: [python]
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: ruff-format
+        entry: ruff format
+        args: []
+        language: python
+        types: [python]
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: env PYTHONPATH=bot mypy --config-file=pyproject.toml
+        language: system
+        types: [python]

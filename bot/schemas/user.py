@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 
 
-class UserDataSchema(BaseModel):
-    history: str
+class UserSchema(BaseModel):
+    id: int
+
+    class Config:
+        from_attributes = True
