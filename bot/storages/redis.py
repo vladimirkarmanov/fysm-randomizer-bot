@@ -7,15 +7,15 @@ import httpx
 from redis.asyncio import ConnectionPool, Redis
 
 from settings import settings
+from storages.base import BaseStorage
 
 logger = logging.getLogger(__name__)
 
 
-class RedisStorage:
+class RedisStorage(BaseStorage):
     excluded_types: list[Any] = []
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.redis = Redis(
             connection_pool=ConnectionPool(
                 host=settings.REDIS_HOST,
