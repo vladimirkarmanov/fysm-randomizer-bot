@@ -9,3 +9,8 @@ side_menu: dict[str, CommandSchema] = {
 menu: dict[str, CommandSchema] = {
     'random': CommandSchema(command='random', button_text='Рандом'),
 }
+
+
+admin: dict[str, CommandSchema] = {
+    'users': CommandSchema(command='users', button_text='Пользователи'),
+}
