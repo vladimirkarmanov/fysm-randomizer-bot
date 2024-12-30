@@ -44,7 +44,7 @@ core_practice_modules = {
 
 core_practice_modes = {
     'values': ['1x8', '1x18', '2x4', '2x8', '4x2', '4x4'],
-    'weights': [10, 1, 9, 6, 2, 2],
+    'weights': [10, 3, 9, 6, 3, 3],
 }
 
 games_by_level = {
