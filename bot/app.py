@@ -71,10 +71,10 @@ async def default_error_handler(event: ErrorEvent):
 
 async def run_polling():
     from core.base import on_shutdown, on_startup
-    from handlers import random, start
+    from handlers import feedback, random, start
     from handlers.admin import router as admin_router
 
-    dp.include_routers(start.router, random.router, admin_router.router)
+    dp.include_routers(start.router, feedback.router, random.router, admin_router.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await on_startup()

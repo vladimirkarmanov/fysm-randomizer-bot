@@ -10,14 +10,11 @@ from utils.keyboard import get_main_menu_keyboard
 router = Router()
 
 
-@router.message(Command(side_menu['start'].command))
-async def start(message: types.Message, state: FSMContext):
+@router.message(Command(side_menu['feedback'].command))
+async def feedback(message: types.Message, state: FSMContext):
     await state.clear()
     buttons = [ButtonSchema(text=b.button_text) for b in menu.values()]
-    text = (
-        f'Подберу рандомную тренировку в стиле FYSM /random\n\n'
-        f'Оставить обратную связь или предложения @{settings.DEVELOPER_USERNAME}'
-    )
+    text = f'Для обратной связи и предложений -> @{settings.DEVELOPER_USERNAME}'
     await message.answer(
         text=text,
         parse_mode='HTML',
