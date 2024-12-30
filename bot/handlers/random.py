@@ -106,4 +106,6 @@ async def random_fysm_response(
     await update_text_message(message=callback.message, new_value=text, keyboard=None)
     await callback.answer()
 
-    await UserService(db_session).get_or_create(UserSchema(id=callback.from_user.id))
+    await UserService(db_session).get_or_create(
+        UserSchema(id=callback.from_user.id, username=callback.from_user.username)
+    )
