@@ -50,6 +50,7 @@ exclude = [
     "site-packages",
     ".venv",
     "venv",
+    "alembic",
 ]
 src = ["bot"]
 line-length = 119

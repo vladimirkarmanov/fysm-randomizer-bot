@@ -22,3 +22,5 @@ repos:
         entry: env PYTHONPATH=bot mypy --config-file=pyproject.toml
         language: system
         types: [python]
+
+exclude: 'alembic/.*|tests/.*'
