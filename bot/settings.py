@@ -8,9 +8,8 @@ class Settings(BaseSettings):
     ENVIRONMENT: str
 
     BOT_TOKEN: SecretStr
-
-    # ids
     DEVELOPER_ID: int
+    DEVELOPER_USERNAME: str
 
     # database
     DATABASE_PATH: str
