@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Sequence
 
 from sqlalchemy import select
 
@@ -15,8 +15,12 @@ class UserRepository(BaseRepository[User]):
         statement = select(User).where(User.id == id)
         return await self.one_or_none(statement)
 
-    async def get_all(self, limit: int, offset: int) -> list[User]:
+    async def get_all(self, limit: int, offset: int, order_by: str | None = None) -> Sequence[User]:
         statement = select(User).limit(limit).offset(offset)
+        if order_by and order_by.startswith('-'):
+            statement = statement.order_by(User.__table__.columns[order_by[1:]].desc())
+        elif order_by:
+            statement = statement.order_by(User.__table__.columns[order_by[1:]].asc())
         return await self.all(statement)
 
     async def update(self, user: User, **fields: dict[str, Any]) -> User:

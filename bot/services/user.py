@@ -1,4 +1,5 @@
 import logging
+from typing import Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,8 +25,8 @@ class UserService:
         user = await self.repository.get(id)
         return UserSchema(**user.__dict__) if user else None
 
-    async def get_all(self, limit: int, offset: int) -> list[UserSchema]:
-        users = await self.repository.get_all(limit, offset)
+    async def get_all(self, limit: int, offset: int, order_by: str | None = None) -> Sequence[UserSchema]:
+        users = await self.repository.get_all(limit, offset, order_by)
         return [UserSchema(**u.__dict__) for u in users]
 
     async def get_users_count(self) -> int:

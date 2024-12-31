@@ -15,7 +15,7 @@ router = Router()
 @db_session(commit=False)
 async def get_users(message: types.Message, *, db_session: AsyncSession):
     user_service = UserService(db_session)
-    users = await user_service.get_all(limit=100, offset=0)
+    users = await user_service.get_all(limit=100, offset=0, order_by='-created_at')
     total_users = await user_service.get_users_count()
 
     text = '\n\n'.join([schema_obj_to_str(u) for u in users])
