@@ -27,3 +27,6 @@ class UserService:
     async def get_all(self, limit: int, offset: int) -> list[UserSchema]:
         users = await self.repository.get_all(limit, offset)
         return [UserSchema(**u.__dict__) for u in users]
+
+    async def get_users_count(self) -> int:
+        return await self.repository.get_users_count()

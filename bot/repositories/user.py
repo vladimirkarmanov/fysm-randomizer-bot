@@ -23,3 +23,6 @@ class UserRepository(BaseRepository[User]):
         for field, value in fields.items():
             setattr(user, field, value)
         return await self.save(user)
+
+    async def get_users_count(self) -> int:
+        return await self.count(User) or 0
