@@ -1,8 +1,8 @@
-from typing import Generic, TypeVar
+from typing import Generic, Sequence, TypeVar
 
-from sqlalchemy.engine import CursorResult
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql import Delete, Select, Update
+from sqlalchemy.sql import Select
 
 T = TypeVar('T')
 
@@ -23,11 +23,9 @@ class BaseRepository(Generic[T]):
     async def one_or_none(self, statement: Select) -> T | None:
         return (await self.session.execute(statement)).scalars().one_or_none()
 
-    async def all(self, statement: Select) -> list[T]:
+    async def all(self, statement: Select) -> Sequence[T]:
         return (await self.session.execute(statement)).scalars().all()
 
-    async def _all(self, statement: Select) -> list[T]:
-        return (await self.session.execute(statement)).all()
-
-    async def execute(self, statement: Select | Update | Delete) -> CursorResult:
-        return await self.session.execute(statement)
+    async def count(self, table: T) -> int | None:
+        statement = select(func.count()).select_from(table)
+        return await self.session.scalar(statement)

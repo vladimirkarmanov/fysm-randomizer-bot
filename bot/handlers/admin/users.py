@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from constants.commands import admin
 from core.decorators import db_session
 from services.user import UserService
+from utils.formatter import schema_obj_to_str
 
 router = Router()
 
@@ -13,6 +14,9 @@ router = Router()
 @router.message(F.text == admin['users'].button_text)
 @db_session(commit=False)
 async def get_users(message: types.Message, *, db_session: AsyncSession):
-    users = await UserService(db_session).get_all(limit=100, offset=0)
-    text = '\n\n'.join([str(u.__dict__) for u in users])
-    await message.answer(text=f'Пользователи:\n{text}', parse_mode='HTML')
+    user_service = UserService(db_session)
+    users = await user_service.get_all(limit=100, offset=0, order_by='-created_at')
+    total_users = await user_service.get_users_count()
+
+    text = '\n\n'.join([schema_obj_to_str(u) for u in users])
+    await message.answer(text=f'Пользователи ({total_users}):\n{text}', parse_mode='HTML')
