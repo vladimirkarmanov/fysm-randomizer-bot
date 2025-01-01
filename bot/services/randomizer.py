@@ -2,7 +2,14 @@ import logging
 import random
 from dataclasses import dataclass
 
-from constants.fysm import core_practice_modes, core_practice_modules, games, zero_games, zero_modes, zero_modules
+from constants.fysm import (
+    core_practice_modes,
+    core_practice_modules,
+    games_by_level,
+    zero_games,
+    zero_modes,
+    zero_modules,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +40,7 @@ class RandomizerService:
         self,
         zero_module: str,
         fysm_level: str,
+        game_type: str,
         core_module: str,
     ) -> str:
         if zero_module == 'random':
@@ -42,7 +50,8 @@ class RandomizerService:
             core_module = random.choice(list(core_practice_modules.keys()))
 
         number_of_games = core_practice_modules[core_module]['number_of_games']
-        games_for_practice = random.sample(games[fysm_level], number_of_games)
+        games = games_by_level[fysm_level]
+        games_for_practice = random.sample(games[game_type], number_of_games)
         zero = self._get_random_zero(zero_module)
 
         modes_for_practice = random.choices(
