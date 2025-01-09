@@ -9,7 +9,7 @@ from constants.commands import menu, side_menu
 from constants.fysm import core_practice_modules
 from core.decorators import db_session
 from schemas.keyboard import ButtonSchema
-from schemas.user import UserSchema
+from schemas.user import UserCreateSchema, UserUpdateSchema
 from services.randomizer import RandomizerService
 from services.user import UserService
 from utils.keyboard import get_inline_keyboard
@@ -162,11 +162,9 @@ async def random_fysm_response(
 
     await callback.answer()
     await UserService(db_session).get_or_create(
-        UserSchema(id=callback.from_user.id, username=callback.from_user.username)
+        UserCreateSchema(id=callback.from_user.id, username=callback.from_user.username)
     )
     await UserService(db_session).update(
         id=callback.from_user.id,
-        user_schema=UserSchema(
-            id=callback.from_user.id, username=callback.from_user.username, last_activity_at=datetime.now()
-        ),
+        user_schema=UserUpdateSchema(username=callback.from_user.username, last_activity_at=datetime.now()),
     )
