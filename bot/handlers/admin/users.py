@@ -90,7 +90,7 @@ async def get_activity(message: types.Message, *, db_session: AsyncSession):
     text = '\n\n'.join([f'{schema_obj_to_str(u)}' for u in users])
 
     await message.answer(
-        text=f'Активность ({datetime.now().date()}):\n\n{text}',
+        text=f'<b>{datetime.now().date()}</b>\nАктивных пользователей ({len(users)}):\n\n{text}',
         parse_mode='HTML',
         reply_markup=None,
     )

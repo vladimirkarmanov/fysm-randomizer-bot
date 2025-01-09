@@ -5,11 +5,11 @@ from sqlalchemy import func, select
 
 from models.user import User
 from repositories.base import BaseRepository
-from schemas.user import UserSchema
+from schemas.user import UserCreateSchema
 
 
 class UserRepository(BaseRepository[User]):
-    async def create(self, user: UserSchema) -> User:
+    async def create(self, user: UserCreateSchema) -> User:
         return await self.save(User(**user.__dict__))
 
     async def get(self, id: int) -> User | None:
@@ -32,7 +32,7 @@ class UserRepository(BaseRepository[User]):
     async def get_users_count(self) -> int:
         return await self.count(User) or 0
 
-    async def get_active_users(self, dt: date) -> Sequence[UserSchema]:
+    async def get_active_users(self, dt: date) -> Sequence[UserCreateSchema]:
         order_by = '-last_activity_at'
         statement = (
             select(User)
