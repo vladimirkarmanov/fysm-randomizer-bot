@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from aiogram import F, Router, types
 from aiogram.filters import Command
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -161,4 +163,10 @@ async def random_fysm_response(
     await callback.answer()
     await UserService(db_session).get_or_create(
         UserSchema(id=callback.from_user.id, username=callback.from_user.username)
+    )
+    await UserService(db_session).update(
+        id=callback.from_user.id,
+        user_schema=UserSchema(
+            id=callback.from_user.id, username=callback.from_user.username, last_activity_at=datetime.now()
+        ),
     )

@@ -14,4 +14,5 @@ menu: dict[str, CommandSchema] = {
 
 admin: dict[str, CommandSchema] = {
     'users': CommandSchema(command='users', button_text='Пользователи'),
+    'activity': CommandSchema(command='activity', button_text='Активность'),
 }

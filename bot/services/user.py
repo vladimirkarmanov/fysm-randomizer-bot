@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 from typing import Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -29,5 +30,13 @@ class UserService:
         users = await self.repository.get_all(limit, offset, order_by)
         return [UserSchema(**u.__dict__) for u in users]
 
+    async def get_active_users(self, dt: date) -> Sequence[UserSchema]:
+        users = await self.repository.get_active_users(dt)
+        return [UserSchema(**u.__dict__) for u in users]
+
     async def get_users_count(self) -> int:
         return await self.repository.get_users_count()
+
+    async def update(self, id: int, user_schema: UserSchema):
+        user = await self.repository.get(id)
+        await self.repository.update(user, **user_schema.__dict__)

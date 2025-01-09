@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from aiogram import F, Router, types
 from aiogram.filters.command import Command
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -77,3 +79,18 @@ async def next_users(
         keyboard=get_inline_keyboard(buttons, row_size=2),
     )
     await callback.answer()
+
+
+@router.message(Command(admin['activity'].command))
+@router.message(F.text == admin['activity'].button_text)
+@db_session(commit=False)
+async def get_activity(message: types.Message, *, db_session: AsyncSession):
+    user_service = UserService(db_session)
+    users = await user_service.get_active_users(dt=datetime.now().date())
+    text = '\n\n'.join([f'{schema_obj_to_str(u)}' for u in users])
+
+    await message.answer(
+        text=f'Активность ({datetime.now().date()}):\n\n{text}',
+        parse_mode='HTML',
+        reply_markup=None,
+    )
