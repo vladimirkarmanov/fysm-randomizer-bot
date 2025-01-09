@@ -1,6 +1,7 @@
+from datetime import date
 from typing import Any, Sequence
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from models.user import User
 from repositories.base import BaseRepository
@@ -30,3 +31,12 @@ class UserRepository(BaseRepository[User]):
 
     async def get_users_count(self) -> int:
         return await self.count(User) or 0
+
+    async def get_active_users(self, dt: date) -> Sequence[UserSchema]:
+        order_by = '-last_activity_at'
+        statement = (
+            select(User)
+            .filter(func.date(User.last_activity_at) == dt)
+            .order_by(User.__table__.columns[order_by[1:]].desc())
+        )
+        return await self.all(statement)

@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     REDIS_KEY_EX: int
     RATE_LIMIT: int
 
+    # pagination
+    ITEMS_PER_PAGE: int
+
     @property
     def is_dev(self):
         return self.ENVIRONMENT == 'development'

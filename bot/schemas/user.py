@@ -9,6 +9,7 @@ class UserSchema(BaseModel):
     username: str | None
     created_at: datetime | None = None
     updated_at: datetime | None = None
+    last_activity_at: datetime | None = None
 
     class Config:
         from_attributes = True
