@@ -19,6 +19,7 @@ class Zero:
     module_name: str
     mode: str
     game: str
+    note: str
 
 
 class RandomizerService:
@@ -28,12 +29,21 @@ class RandomizerService:
             weights=zero_modes[module_name]['weights'],
             k=1,
         )[0]
-        game = random.choice(zero_games[module_name])
+
+        if module_name == 'static':
+            game = random.choice(zero_games[module_name])
+            game = f'Статика: {game}'
+            note = ''
+        else:
+            games = random.sample(zero_games[module_name], 3)
+            game = f'Динамика: {games[0]}, {games[1]}, {games[2]}'
+            note = '\n* отдельные упражнения из методички'
 
         return Zero(
             module_name=module_name,
             mode=mode,
             game=game,
+            note=note,
         )
 
     def get_random_practice(
@@ -64,5 +74,7 @@ class RandomizerService:
         for game, mode in zip(games_for_practice, modes_for_practice):
             core_practice += f'{game} - {mode}\n'
 
-        text = f'<b>Включение:</b>\n{zero.game} - {zero.mode}\n\n' f'<b>Основная часть:</b>\n{core_practice}'
+        text = (
+            f'<b>Включение:</b>\n{zero.game}\nРежим: {zero.mode}{zero.note}\n\n<b>Основная часть:</b>\n{core_practice}'
+        )
         return text
