@@ -87,10 +87,9 @@ async def next_users(
 async def get_activity(message: types.Message, *, db_session: AsyncSession):
     user_service = UserService(db_session)
     users = await user_service.get_active_users(dt=datetime.now().date())
-    text = '\n\n'.join([f'{schema_obj_to_str(u)}' for u in users])
 
     await message.answer(
-        text=f'<b>{datetime.now().date()}</b>\nАктивных пользователей ({len(users)}):\n\n{text}',
+        text=f'<b>{datetime.now().date()}</b>\nАктивных пользователей: {len(users)}',
         parse_mode='HTML',
         reply_markup=None,
     )
