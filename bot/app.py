@@ -57,24 +57,22 @@ async def default_error_handler(event: ErrorEvent):
             await bot.send_message(event.update.message.chat.id, f'{event.exception.msg}')
         else:
             await bot.send_message(
-                event.update.message.chat.id, f'Unhandled Event: {event.update.event}\n' f'exc: {event.exception.msg}'
+                event.update.message.chat.id, f'Unhandled Event: {event.update.event}\nexc: {event.exception.msg}'
             )
     else:
         await bot.send_message(
             settings.DEVELOPER_ID,
-            f'Ошибка!\n '
-            f'{event.exception.__class__}\n'
-            f'{event.exception}\n'
-            f'Message: {event.update.message.text}',
+            f'Ошибка!\n {event.exception.__class__}\n{event.exception}\nMessage: {event.update.message.text}',
         )
 
 
 async def run_polling():
     from core.base import on_shutdown, on_startup
-    from handlers import feedback, random, start
+    from handlers import feedback, start
     from handlers.admin import router as admin_router
+    from handlers.random import router as random_router
 
-    dp.include_routers(start.router, feedback.router, random.router, admin_router.router)
+    dp.include_routers(start.router, feedback.router, random_router.router, admin_router.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await on_startup()

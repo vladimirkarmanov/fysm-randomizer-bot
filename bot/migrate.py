@@ -12,8 +12,6 @@ def ensure_database_exists():
     with sqlite3.connect(os.path.join(BOT_ABS_PATH, settings.DATABASE_PATH)) as conn:
         cursor = conn.cursor()
         cursor.execute('SELECT SQLITE_VERSION()')
-        data = cursor.fetchone()
-        print('SQLite version:', data)
 
 
 ensure_database_exists()
