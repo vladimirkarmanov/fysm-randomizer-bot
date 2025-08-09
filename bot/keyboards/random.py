@@ -6,15 +6,15 @@ from schemas.keyboard import ButtonSchema
 def get_zero_module_buttons(callback_name: str) -> list[ButtonSchema]:
     return [
         ButtonSchema(
-            text='Статика',
+            text='статика',
             callback_data=RandomCallback(callback_name=callback_name, zero_module='static'),
         ),
         ButtonSchema(
-            text='Статодинамика',
+            text='статодинамика',
             callback_data=RandomCallback(callback_name=callback_name, zero_module='dynamic'),
         ),
         ButtonSchema(
-            text='Доверяю рандому 🔥',
+            text='доверяю рандому 🔥',
             callback_data=RandomCallback(callback_name=callback_name, zero_module='random'),
         ),
     ]
@@ -31,7 +31,7 @@ def get_core_module_buttons(callback_name: str) -> list[ButtonSchema]:
         )
     buttons.append(
         ButtonSchema(
-            text='Доверяю рандому 🔥',
+            text='доверяю рандому 🔥',
             callback_data=RandomCallback(callback_name=callback_name, core_module='random'),
         )
     )
@@ -57,8 +57,8 @@ def get_fysm_level_buttons(callback_name: str) -> list[ButtonSchema]:
 
 def get_game_type_buttons(callback_name: str) -> list[ButtonSchema]:
     return [
-        ButtonSchema(text='Центр', callback_data=RandomCallback(callback_name=callback_name, game_type='center')),
-        ButtonSchema(text='Верх', callback_data=RandomCallback(callback_name=callback_name, game_type='top')),
-        ButtonSchema(text='Низ', callback_data=RandomCallback(callback_name=callback_name, game_type='bottom')),
-        ButtonSchema(text='Все', callback_data=RandomCallback(callback_name=callback_name, game_type='all')),
+        ButtonSchema(text='центр', callback_data=RandomCallback(callback_name=callback_name, game_type='center')),
+        ButtonSchema(text='верх', callback_data=RandomCallback(callback_name=callback_name, game_type='top')),
+        ButtonSchema(text='низ', callback_data=RandomCallback(callback_name=callback_name, game_type='bottom')),
+        ButtonSchema(text='все', callback_data=RandomCallback(callback_name=callback_name, game_type='all')),
     ]

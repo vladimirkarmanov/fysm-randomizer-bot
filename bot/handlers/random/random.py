@@ -27,11 +27,11 @@ async def random_handler(message: types.Message, state: FSMContext):
 
     buttons = [
         ButtonSchema(
-            text='Выбирать',
+            text='выбирать',
             callback_data=RandomCallback(callback_name='setup', initial_choice='manual'),
         ),
         ButtonSchema(
-            text='Испытать удачу ☠️',
+            text='испытать удачу ☠️',
             callback_data=RandomCallback(callback_name='setup', initial_choice='random'),
         ),
     ]
@@ -59,7 +59,6 @@ async def setup_callback(
             await update_text_message(message=callback.message, new_value=text, keyboard=None)
 
         await log_user_activity(db_session, id=callback.from_user.id, username=callback.from_user.username)
-        await callback.answer()
     else:
         await state.set_state(RandomState.zero_module)
 
@@ -68,6 +67,8 @@ async def setup_callback(
             new_value='<b>Выберите тип включения</b>',
             keyboard=get_inline_keyboard(get_zero_module_buttons('zero_module')),
         )
+
+    await callback.answer()
 
 
 @router.callback_query(RandomState.zero_module, RandomCallback.filter(F.callback_name == 'zero_module'))

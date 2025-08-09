@@ -1,4 +1,7 @@
-zero_modules = [{'name': 'static', 'name_ru': 'Короткая статика'}, {'name': 'dynamic', 'name_ru': 'Статодинамика'}]
+zero_modules = [
+    {'name': 'static', 'name_ru': 'Короткая статика'},
+    {'name': 'dynamic', 'name_ru': 'Статодинамика'},
+]
 
 zero_modes = {
     'static': {
