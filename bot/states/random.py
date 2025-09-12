@@ -1,7 +1,11 @@
 from aiogram.fsm.state import State, StatesGroup
 
 
-class RandomState(StatesGroup):
+class RandomChoiceState(StatesGroup):
+    fysm_level = State()
+
+
+class ManualChoiceState(StatesGroup):
     zero_module = State()
     core_module = State()
 

@@ -62,7 +62,7 @@ class RandomizerService:
         )[0]
         return game, mode
 
-    def get_full_random_practice(self) -> str:
+    def get_full_random_practice(self, fysm_level: str | None) -> str:
         zero = self._get_random_zero(random.choice(zero_modules)['name'])
 
         core_practice = []
@@ -72,7 +72,7 @@ class RandomizerService:
 
         games_to_exclude: list[str] = []
         for _ in range(number_of_games):
-            fysm_level = random.choice(list(games_by_level.keys()))
+            fysm_level = fysm_level or random.choice(list(games_by_level.keys()))
             games = games_by_level[fysm_level]
             game_type = random.choice(list(games.keys()))
 

@@ -1,5 +1,8 @@
 {
-    "executionEnvironments": [
-        {"root": "bot"}
-    ]
+  "venvPath": ".",
+  "pythonVersion": "3.13",
+  "venv": "/Users/karmanov/projects/fysm-randomizer-bot/.venv/",
+  "executionEnvironments": [{ "root": "bot" }],
+  "typeCheckingMode": "basic",
+  "exclude": ["**/node_modules", "**/__pycache__", "**/media"]
 }
