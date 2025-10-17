@@ -1,0 +1,142 @@
+from aiogram import F, Router, types
+from aiogram.fsm.context import FSMContext
+from callbacks.fysm import RandomCallback
+from keyboards.random import get_fysm_level_buttons, get_game_type_buttons
+from states.random import MortalModuleState
+from utils.keyboard import get_inline_keyboard
+from utils.message import update_text_message
+
+from app.services.randomizer_service import RandomizerService
+from app.use_cases.log_user_activity import LogUserActivity, UserInputDTO
+from ioc import IoC
+
+router = Router()
+
+
+@router.callback_query(MortalModuleState.first_fysm_level, RandomCallback.filter(F.callback_name == 'fysm_level'))
+async def first_fysm_level_callback(callback: types.CallbackQuery, callback_data: RandomCallback, state: FSMContext):
+    await state.update_data(first_fysm_level=callback_data.fysm_level)
+    await state.set_state(MortalModuleState.first_game_type)
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(
+            message=callback.message,
+            new_value='<b>Алгоритм 1:</b> выберите вид алгоритма',
+            keyboard=get_inline_keyboard(get_game_type_buttons('game_type')),
+        )
+        await callback.answer()
+
+
+@router.callback_query(MortalModuleState.first_game_type, RandomCallback.filter(F.callback_name == 'game_type'))
+async def first_game_type_callback(callback: types.CallbackQuery, callback_data: RandomCallback, state: FSMContext):
+    await state.update_data(first_game_type=callback_data.game_type)
+    await state.set_state(MortalModuleState.second_fysm_level)
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(
+            message=callback.message,
+            new_value='<b>Алгоритм 2:</b> выберите уровень FYSM',
+            keyboard=get_inline_keyboard(get_fysm_level_buttons('fysm_level')),
+        )
+        await callback.answer()
+
+
+@router.callback_query(MortalModuleState.second_fysm_level, RandomCallback.filter(F.callback_name == 'fysm_level'))
+async def second_fysm_level_callback(callback: types.CallbackQuery, callback_data: RandomCallback, state: FSMContext):
+    await state.update_data(second_fysm_level=callback_data.fysm_level)
+    await state.set_state(MortalModuleState.second_game_type)
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(
+            message=callback.message,
+            new_value='<b>Алгоритм 2:</b> выберите вид алгоритма',
+            keyboard=get_inline_keyboard(get_game_type_buttons('game_type')),
+        )
+        await callback.answer()
+
+
+@router.callback_query(MortalModuleState.second_game_type, RandomCallback.filter(F.callback_name == 'game_type'))
+async def second_game_type_callback(callback: types.CallbackQuery, callback_data: RandomCallback, state: FSMContext):
+    await state.update_data(second_game_type=callback_data.game_type)
+    await state.set_state(MortalModuleState.third_fysm_level)
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(
+            message=callback.message,
+            new_value='<b>Алгоритм 3:</b> выберите уровень FYSM',
+            keyboard=get_inline_keyboard(get_fysm_level_buttons('fysm_level')),
+        )
+        await callback.answer()
+
+
+@router.callback_query(MortalModuleState.third_fysm_level, RandomCallback.filter(F.callback_name == 'fysm_level'))
+async def third_fysm_level_callback(callback: types.CallbackQuery, callback_data: RandomCallback, state: FSMContext):
+    await state.update_data(third_fysm_level=callback_data.fysm_level)
+    await state.set_state(MortalModuleState.third_game_type)
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(
+            message=callback.message,
+            new_value='<b>Алгоритм 3:</b> выберите вид алгоритма',
+            keyboard=get_inline_keyboard(get_game_type_buttons('game_type')),
+        )
+        await callback.answer()
+
+
+@router.callback_query(MortalModuleState.third_game_type, RandomCallback.filter(F.callback_name == 'game_type'))
+async def third_game_type_callback(callback: types.CallbackQuery, callback_data: RandomCallback, state: FSMContext):
+    await state.update_data(third_game_type=callback_data.game_type)
+    await state.set_state(MortalModuleState.fourth_fysm_level)
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(
+            message=callback.message,
+            new_value='<b>Алгоритм 4:</b> выберите уровень FYSM',
+            keyboard=get_inline_keyboard(get_fysm_level_buttons('fysm_level')),
+        )
+        await callback.answer()
+
+
+@router.callback_query(MortalModuleState.fourth_fysm_level, RandomCallback.filter(F.callback_name == 'fysm_level'))
+async def fourth_fysm_level_callback(callback: types.CallbackQuery, callback_data: RandomCallback, state: FSMContext):
+    await state.update_data(fourth_fysm_level=callback_data.fysm_level)
+    await state.set_state(MortalModuleState.fourth_game_type)
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(
+            message=callback.message,
+            new_value='<b>Алгоритм 4:</b> выберите вид алгоритма',
+            keyboard=get_inline_keyboard(get_game_type_buttons('game_type')),
+        )
+        await callback.answer()
+
+
+@router.callback_query(MortalModuleState.fourth_game_type, RandomCallback.filter(F.callback_name == 'game_type'))
+async def fourth_game_type_callback(
+    callback: types.CallbackQuery,
+    callback_data: RandomCallback,
+    state: FSMContext,
+    ioc: IoC,
+):
+    state_data = await state.get_data()
+
+    text = RandomizerService().get_random_practice(
+        zero_module=state_data.get('zero_module'),
+        first_fysm_level=state_data.get('first_fysm_level'),
+        first_game_type=state_data.get('first_game_type'),
+        second_fysm_level=state_data.get('second_fysm_level'),
+        second_game_type=state_data.get('second_game_type'),
+        third_fysm_level=state_data.get('third_fysm_level'),
+        third_game_type=state_data.get('third_game_type'),
+        fourth_fysm_level=state_data.get('fourth_fysm_level'),
+        fourth_game_type=callback_data.game_type,
+    )
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(message=callback.message, new_value=text, keyboard=None)
+
+    async with ioc.uow:
+        await LogUserActivity(uow=ioc.uow).execute(
+            UserInputDTO(telegram_id=callback.from_user.id, username=callback.from_user.username)
+        )
+    await callback.answer()

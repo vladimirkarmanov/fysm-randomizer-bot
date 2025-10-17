@@ -1,0 +1,52 @@
+from aiogram import F, Router, types
+from aiogram.fsm.context import FSMContext
+from callbacks.fysm import RandomCallback
+from keyboards.random import get_game_type_buttons
+from states.random import BaseModuleState
+from utils.keyboard import get_inline_keyboard
+from utils.message import update_text_message
+
+from app.services.randomizer_service import RandomizerService
+from app.use_cases.log_user_activity import LogUserActivity, UserInputDTO
+from ioc import IoC
+
+router = Router()
+
+
+@router.callback_query(BaseModuleState.first_fysm_level, RandomCallback.filter(F.callback_name == 'fysm_level'))
+async def first_fysm_level_callback(callback: types.CallbackQuery, callback_data: RandomCallback, state: FSMContext):
+    await state.update_data(first_fysm_level=callback_data.fysm_level)
+    await state.set_state(BaseModuleState.first_game_type)
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(
+            message=callback.message,
+            new_value='<b>Алгоритм 1:</b> выберите вид алгоритма',
+            keyboard=get_inline_keyboard(get_game_type_buttons('game_type')),
+        )
+        await callback.answer()
+
+
+@router.callback_query(BaseModuleState.first_game_type, RandomCallback.filter(F.callback_name == 'game_type'))
+async def first_game_type_callback(
+    callback: types.CallbackQuery,
+    callback_data: RandomCallback,
+    state: FSMContext,
+    ioc: IoC,
+):
+    state_data = await state.get_data()
+
+    text = RandomizerService().get_random_practice(
+        zero_module=state_data.get('zero_module'),
+        first_fysm_level=state_data.get('first_fysm_level'),
+        first_game_type=callback_data.game_type,
+    )
+
+    if isinstance(callback.message, types.Message):
+        await update_text_message(message=callback.message, new_value=text, keyboard=None)
+
+    async with ioc.uow:
+        await LogUserActivity(uow=ioc.uow).execute(
+            UserInputDTO(telegram_id=callback.from_user.id, username=callback.from_user.username)
+        )
+    await callback.answer()

@@ -19,8 +19,13 @@ repos:
     hooks:
       - id: mypy
         name: mypy
-        entry: env PYTHONPATH=bot mypy --config-file=pyproject.toml
+        entry: env PYTHONPATH=bot uv run mypy --config-file=pyproject.toml --show-traceback
         language: system
         types: [python]
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.9.3
+    hooks:
+      - id: uv-lock
+
 
 exclude: 'alembic/.*|tests/.*'

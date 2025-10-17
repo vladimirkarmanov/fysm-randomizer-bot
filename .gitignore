@@ -16,4 +16,3 @@ pylintrc
 .env
 deploy.sh
 media
-data

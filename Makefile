@@ -1,16 +1,16 @@
 SHELL := /bin/zsh
 
 polling:
-	(set -a && source .env && cd ./bot && uv run polling.py)
+	env PYTHONPATH=bot uv run ./bot/telegram/polling.py
 
 compose-db:
-	set -a && source .env && docker compose -f docker-compose.dev.yml up --build redis
+	set -a && source .env && docker compose -f docker-compose.dev.yml up --build postgres redis
 
 compose-bot:
 	set -a && source .env && docker compose -f docker-compose.dev.yml up --build bot
 
 db-migrate:
-	(set -a && source .env && cd ./bot && uv run migrate.py)
+	(set -a && source .env && env PYTHONPATH=bot uv run ./bot/infra/db/migrate.py)
 
 deploy:
 	/bin/bash deploy.sh
