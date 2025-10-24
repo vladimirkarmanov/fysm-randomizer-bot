@@ -38,7 +38,7 @@ LOGGING: dict[str, Any] = {
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-            'formatter': 'json',
+            'formatter': 'default',
         },
     },
 }
