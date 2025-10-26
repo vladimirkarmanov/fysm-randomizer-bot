@@ -9,8 +9,8 @@ from schemas.keyboard import ButtonSchema
 from utils.keyboard import get_inline_keyboard
 from utils.message import update_text_message
 
+from app.interfaces.container import DIProtocol
 from infra.config.settings import get_settings
-from infra.container import DIProtocol
 
 router = Router()
 settings = get_settings()

@@ -6,9 +6,9 @@ from states.random import RandomChoiceState
 from utils.keyboard import get_inline_keyboard
 from utils.message import update_text_message
 
+from app.interfaces.container import DIProtocol
 from app.services.randomizer_service import RandomizerService
 from app.use_cases.log_user_activity import LogUserActivity, UserInputDTO
-from infra.container import DIProtocol
 
 router = Router()
 

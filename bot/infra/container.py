@@ -1,21 +1,9 @@
 import threading
 from contextlib import contextmanager
 from types import LambdaType
-from typing import Any, Callable, Iterator, Protocol, Type
+from typing import Any, Callable, Iterator, Type
 
-from infra.config.settings import get_settings
-
-settings = get_settings()
-
-
-class DIProtocol(Protocol):
-    """DI interface for type hints."""
-
-    def register(self, key: str, factory: Callable[[], Any], **kwargs) -> None: ...
-    def resolve(self, key: str) -> Any: ...
-    @contextmanager
-    def override(self, key: str, new_obj: Callable[[], Any], **kwargs) -> Iterator[None]: ...
-    def lazy_import(self, module_path: str, class_name: str) -> Callable[[], Type]: ...
+from app.interfaces.container import DIProtocol
 
 
 class _DIItem:
@@ -98,4 +86,4 @@ class _Container(_DI):
 
 container: DIProtocol = _Container()
 
-__all__ = ['DIProtocol', 'container']
+__all__ = ['container']
