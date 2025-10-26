@@ -3,15 +3,16 @@ from typing import Any, Awaitable, Callable, Dict
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject
 
+from app.interfaces.storages.base_storage import IBaseStorage
 from infra.config.settings import get_settings
-from infra.storage import RedisStorage
+from infra.container import container
 
 settings = get_settings()
 
 
 class ThrottlingMiddleware(BaseMiddleware):
     def __init__(self):
-        self.storage = RedisStorage()
+        self.storage: IBaseStorage = container.resolve('redis_storage')
 
     async def __call__(
         self,

@@ -8,7 +8,7 @@ from utils.message import update_text_message
 
 from app.services.randomizer_service import RandomizerService
 from app.use_cases.log_user_activity import LogUserActivity, UserInputDTO
-from ioc import IoC
+from infra.container import DIProtocol
 
 router = Router()
 
@@ -60,7 +60,7 @@ async def second_game_type_callback(
     callback: types.CallbackQuery,
     callback_data: RandomCallback,
     state: FSMContext,
-    ioc: IoC,
+    di: DIProtocol,
 ):
     state_data = await state.get_data()
 
@@ -75,8 +75,8 @@ async def second_game_type_callback(
     if isinstance(callback.message, types.Message):
         await update_text_message(message=callback.message, new_value=text, keyboard=None)
 
-    async with ioc.uow:
-        await LogUserActivity(uow=ioc.uow).execute(
+    async with di.resolve('uow_cls')() as uow:
+        await LogUserActivity(uow=uow).execute(
             UserInputDTO(telegram_id=callback.from_user.id, username=callback.from_user.username)
         )
     await callback.answer()

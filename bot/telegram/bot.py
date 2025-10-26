@@ -12,10 +12,8 @@ from redis.asyncio.connection import ConnectionPool
 
 from app.exceptions import InnerException
 from infra.config.settings import get_settings
-from infra.db import uow
-from infra.db.main import async_session_factory
+from infra.container import container
 from infra.db.models import start_sqlalchemy_mappers
-from ioc import IoC
 from telegram.middleware.chat import IsPrivateUserChatMiddleware
 from telegram.middleware.chat_action import ChatActionMiddleware
 from telegram.middleware.throttling import ThrottlingMiddleware
@@ -60,10 +58,9 @@ if settings.DEBUG:
 
 logging.config.dictConfig(LOGGING)
 
-ioc = IoC(uow=uow.SqlAlchemyUnitOfWork(session_factory=async_session_factory))
 
 bot = Bot(token=settings.BOT_TOKEN.get_secret_value(), default=DefaultBotProperties(parse_mode='HTML'))
-redis_storage = RedisStorage(
+bot_redis_storage = RedisStorage(
     redis=Redis(
         connection_pool=ConnectionPool(
             host=settings.REDIS_HOST, port=settings.REDIS_PORT, password=settings.REDIS_PASSWORD.get_secret_value()
@@ -72,10 +69,10 @@ redis_storage = RedisStorage(
     key_builder=DefaultKeyBuilder(with_destiny=True),
 )
 dp = Dispatcher(
-    storage=redis_storage,
-    events_isolation=RedisEventIsolation(redis=redis_storage.redis),
+    storage=bot_redis_storage,
+    events_isolation=RedisEventIsolation(redis=bot_redis_storage.redis),
     fsm_strategy=FSMStrategy.USER_IN_CHAT,
-    ioc=ioc,
+    di=container,
 )
 
 

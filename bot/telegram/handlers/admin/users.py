@@ -10,7 +10,7 @@ from utils.keyboard import get_inline_keyboard
 from utils.message import update_text_message
 
 from infra.config.settings import get_settings
-from ioc import IoC
+from infra.container import DIProtocol
 
 router = Router()
 settings = get_settings()
@@ -20,11 +20,11 @@ settings = get_settings()
 @router.message(F.text == admin['users'].button_text)
 async def get_users(
     message: types.Message,
-    ioc: IoC,
+    di: DIProtocol,
 ):
-    async with ioc.uow:
-        users = await ioc.uow.users.all(limit=settings.ITEMS_PER_PAGE, offset=0)
-        total_users = await ioc.uow.users.count()
+    async with di.resolve('uow_cls')() as uow:
+        users = await uow.users.all(limit=settings.ITEMS_PER_PAGE, offset=0)
+        total_users = await uow.users.count()
 
     text = '\n\n'.join([entity_to_str(u) for u in users])
 
@@ -48,12 +48,12 @@ async def get_users(
 async def next_users(
     callback: types.CallbackQuery,
     callback_data: PaginationCallback,
-    ioc: IoC,
+    di: DIProtocol,
 ):
     offset = callback_data.offset
-    async with ioc.uow:
-        users = await ioc.uow.users.all(limit=settings.ITEMS_PER_PAGE, offset=offset)
-        total_users = await ioc.uow.users.count()
+    async with di.resolve('uow_cls')() as uow:
+        users = await uow.users.all(limit=settings.ITEMS_PER_PAGE, offset=offset)
+        total_users = await uow.users.count()
 
     text = '\n\n'.join([entity_to_str(u) for u in users])
 
@@ -86,11 +86,11 @@ async def next_users(
 @router.message(F.text == admin['activity'].button_text)
 async def get_activity(
     message: types.Message,
-    ioc: IoC,
+    di: DIProtocol,
 ):
-    async with ioc.uow:
+    async with di.resolve('uow_cls')() as uow:
         dt = datetime.now().date()
-        users_count = await ioc.uow.users.get_active_users_count(dt)
+        users_count = await uow.users.get_active_users_count(dt)
 
     await message.answer(
         text=f'<b>{datetime.now().date()}</b>\nАктивных пользователей: {users_count}',

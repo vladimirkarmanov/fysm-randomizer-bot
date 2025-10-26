@@ -6,14 +6,15 @@ from sqlalchemy.exc import DBAPIError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.interfaces.uow import IUnitOfWork
+from infra.container import container
 from infra.db.repositories.user_repository import UserRepository
 
 logger = logging.getLogger(__name__)
 
 
 class SqlAlchemyUnitOfWork(IUnitOfWork):
-    def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
-        self._session_factory = session_factory
+    def __init__(self):
+        self._session_factory: async_sessionmaker[AsyncSession] = container.resolve('session_factory')
 
     async def __aenter__(self):
         self.session = self._session_factory()
