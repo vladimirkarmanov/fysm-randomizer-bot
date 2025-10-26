@@ -4,7 +4,7 @@ from aiogram import F, Router, types
 from aiogram.filters.command import Command
 from callbacks.pagination import PaginationCallback
 from constants.commands import admin
-from formatters.formatter import entity_to_str
+from formatters.user import format_user_entity
 from schemas.keyboard import ButtonSchema
 from utils.keyboard import get_inline_keyboard
 from utils.message import update_text_message
@@ -26,7 +26,7 @@ async def get_users(
         users = await uow.users.all(limit=settings.ITEMS_PER_PAGE, offset=0)
         total_users = await uow.users.count()
 
-    text = '\n\n'.join([entity_to_str(u) for u in users])
+    text = '\n\n'.join([format_user_entity(u) for u in users])
 
     buttons = []
     if total_users > settings.ITEMS_PER_PAGE:
@@ -55,7 +55,7 @@ async def next_users(
         users = await uow.users.all(limit=settings.ITEMS_PER_PAGE, offset=offset)
         total_users = await uow.users.count()
 
-    text = '\n\n'.join([entity_to_str(u) for u in users])
+    text = '\n\n'.join([format_user_entity(u) for u in users])
 
     buttons = []
     if offset != 0:

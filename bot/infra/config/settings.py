@@ -1,4 +1,5 @@
 from functools import lru_cache
+from zoneinfo import ZoneInfo
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings
@@ -29,12 +30,16 @@ class Settings(BaseSettings):
     ITEMS_PER_PAGE: int = Field(default=5, ge=1, le=10)
 
     @property
-    def is_dev(self):
+    def is_dev(self) -> bool:
         return self.ENVIRONMENT == 'development'
 
     @property
-    def is_prod(self):
+    def is_prod(self) -> bool:
         return self.ENVIRONMENT == 'production'
+
+    @property
+    def timezone(self) -> ZoneInfo:
+        return ZoneInfo(self.TZ)
 
     model_config = {
         'env_file': '.env',
