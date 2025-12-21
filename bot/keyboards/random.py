@@ -49,8 +49,24 @@ def get_fysm_level_buttons(callback_name: str) -> list[ButtonSchema]:
             callback_data=RandomCallback(callback_name=callback_name, fysm_level='level_2'),
         ),
         ButtonSchema(
+            text='FYSM 3',
+            callback_data=RandomCallback(callback_name=callback_name, fysm_level='level_3'),
+        ),
+        ButtonSchema(
             text='FYSM 1 + FYSM 2',
             callback_data=RandomCallback(callback_name=callback_name, fysm_level='level_1_and_2'),
+        ),
+        ButtonSchema(
+            text='FYSM 1 + FYSM 3',
+            callback_data=RandomCallback(callback_name=callback_name, fysm_level='level_1_and_3'),
+        ),
+        ButtonSchema(
+            text='FYSM 2 + FYSM 3',
+            callback_data=RandomCallback(callback_name=callback_name, fysm_level='level_2_and_3'),
+        ),
+        ButtonSchema(
+            text='FYSM 1 + FYSM 2 + FYSM 3',
+            callback_data=RandomCallback(callback_name=callback_name, fysm_level='level_1_and_2_and_3'),
         ),
     ]
 

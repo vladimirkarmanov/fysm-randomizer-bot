@@ -149,6 +149,41 @@ games = {
             'Перелив №1',
         ],
     },
+    'level_3': {
+        'center': [
+            'Фуст',
+            'Истома',
+            'Кайрос',
+            'Преломление',
+            'Сома',
+            'Тапас',
+            'Ики',
+            'Пресс',
+            'Стяжка',
+        ],
+        'top': [
+            'Стремь',
+            'Крепь',
+            'Зовь',
+            'Випарита 1',
+            'Кшетра',
+            'Феррит',
+            'Канис',
+            'Гутта',
+            'Флюксус',
+        ],
+        'bottom': [
+            'Корни 2',
+            'Ади',
+            'Пласт',
+            'Излучина',
+            'Сизарь',
+            'Штиль 2',
+            'Сочленение',
+            'Меззо Лото',
+            'Сутра',
+        ],
+    },
 }
 
 games_by_level = {
@@ -159,6 +194,10 @@ games_by_level = {
     'level_2': {
         **games['level_2'],
         'all': [*games['level_2']['center'], *games['level_2']['top'], *games['level_2']['bottom']],
+    },
+    'level_3': {
+        **games['level_3'],
+        'all': [*games['level_3']['center'], *games['level_3']['top'], *games['level_3']['bottom']],
     },
     'level_1_and_2': {
         'center': [*games['level_1']['center'], *games['level_2']['center']],
@@ -171,6 +210,48 @@ games_by_level = {
             *games['level_2']['center'],
             *games['level_2']['top'],
             *games['level_2']['bottom'],
+        ],
+    },
+    'level_1_and_3': {
+        'center': [*games['level_1']['center'], *games['level_3']['center']],
+        'top': [*games['level_1']['top'], *games['level_3']['top']],
+        'bottom': [*games['level_1']['bottom'], *games['level_3']['bottom']],
+        'all': [
+            *games['level_1']['center'],
+            *games['level_1']['top'],
+            *games['level_1']['bottom'],
+            *games['level_3']['center'],
+            *games['level_3']['top'],
+            *games['level_3']['bottom'],
+        ],
+    },
+    'level_2_and_3': {
+        'center': [*games['level_2']['center'], *games['level_3']['center']],
+        'top': [*games['level_2']['top'], *games['level_3']['top']],
+        'bottom': [*games['level_2']['bottom'], *games['level_3']['bottom']],
+        'all': [
+            *games['level_2']['center'],
+            *games['level_2']['top'],
+            *games['level_2']['bottom'],
+            *games['level_3']['center'],
+            *games['level_3']['top'],
+            *games['level_3']['bottom'],
+        ],
+    },
+    'level_1_and_2_and_3': {
+        'center': [*games['level_1']['center'], *games['level_2']['center'], *games['level_3']['center']],
+        'top': [*games['level_1']['top'], *games['level_2']['top'], *games['level_3']['top']],
+        'bottom': [*games['level_1']['bottom'], *games['level_2']['bottom'], *games['level_3']['bottom']],
+        'all': [
+            *games['level_1']['center'],
+            *games['level_1']['top'],
+            *games['level_1']['bottom'],
+            *games['level_2']['center'],
+            *games['level_2']['top'],
+            *games['level_2']['bottom'],
+            *games['level_3']['center'],
+            *games['level_3']['top'],
+            *games['level_3']['bottom'],
         ],
     },
 }
