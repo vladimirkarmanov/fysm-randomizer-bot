@@ -67,7 +67,8 @@ async def second_game_type_callback(
 ):
     state_data = await state.get_data()
 
-    text = RandomizerService().get_random_practice(
+    text = await RandomizerService().get_random_practice(
+        user_id=callback.from_user.id,
         zero_module=state_data.get('zero_module'),
         first_fysm_level=state_data.get('first_fysm_level'),
         first_game_type=state_data.get('first_game_type'),

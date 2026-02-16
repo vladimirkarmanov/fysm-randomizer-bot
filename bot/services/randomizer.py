@@ -10,6 +10,8 @@ from constants.fysm import (
     zero_modes,
     zero_modules,
 )
+from core.container import container
+from storages.base import BaseStorage
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +25,9 @@ class Zero:
 
 
 class RandomizerService:
+    def __init__(self):
+        self.storage = container.resolve(BaseStorage)
+
     def _get_random_zero(self, module_name: str) -> Zero:
         mode = random.choices(
             population=zero_modes[module_name]['values'],
@@ -46,23 +51,30 @@ class RandomizerService:
             note=note,
         )
 
-    def _get_random_game_and_mode(
+    async def _get_random_game_and_mode(
         self,
+        user_id: int,
         fysm_level: str,
         game_type: str,
         excluded_games: list[str],
     ) -> tuple[str, str]:
         games = games_by_level[fysm_level]
-        games_by_type = set(games[game_type]) - set(excluded_games)
+        games_by_type = games[game_type]
 
-        game = random.choice(list(games_by_type))
+        game = await self.storage.get_unique_game_for_user(
+            user_id=user_id,
+            fysm_level=fysm_level,
+            game_type=game_type,
+            default_games=games_by_type,
+            excluded_games=excluded_games,
+        )
         mode = random.choices(
             population=core_practice_modes['values'],
             weights=core_practice_modes['weights'],
         )[0]
         return game, mode
 
-    def get_full_random_practice(self, fysm_level: str | None) -> str:
+    async def get_full_random_practice(self, user_id: int, fysm_level: str | None) -> str:
         zero = self._get_random_zero(random.choice(zero_modules)['name'])
 
         core_practice = []
@@ -75,12 +87,7 @@ class RandomizerService:
             fysm_level = fysm_level or random.choice(list(games_by_level.keys()))
             games = games_by_level[fysm_level]
             game_type = random.choice(list(games.keys()))
-
-            game, mode = self._get_random_game_and_mode(
-                fysm_level,
-                game_type,
-                excluded_games=games_to_exclude,
-            )
+            game, mode = await self._get_random_game_and_mode(user_id, fysm_level, game_type, games_to_exclude)
             core_practice.append((game, mode))
             games_to_exclude.append(game)
 
@@ -93,8 +100,9 @@ class RandomizerService:
         )
         return text
 
-    def get_random_practice(
+    async def get_random_practice(
         self,
+        user_id: int,
         zero_module: str,
         first_fysm_level: str,
         first_game_type: str,
@@ -114,7 +122,12 @@ class RandomizerService:
         zero = self._get_random_zero(zero_module)
 
         # first game
-        game, mode = self._get_random_game_and_mode(first_fysm_level, first_game_type, excluded_games=[])
+        game, mode = await self._get_random_game_and_mode(
+            user_id,
+            first_fysm_level,
+            first_game_type,
+            excluded_games=[],
+        )
         core_practice['first'] = {
             'game': game,
             'mode': mode,
@@ -122,7 +135,8 @@ class RandomizerService:
 
         # second game
         if second_fysm_level and second_game_type:
-            game, mode = self._get_random_game_and_mode(
+            game, mode = await self._get_random_game_and_mode(
+                user_id,
                 second_fysm_level,
                 second_game_type,
                 excluded_games=[core_practice['first']['game']],
@@ -134,7 +148,8 @@ class RandomizerService:
 
         # third game
         if third_fysm_level and third_game_type:
-            game, mode = self._get_random_game_and_mode(
+            game, mode = await self._get_random_game_and_mode(
+                user_id,
                 third_fysm_level,
                 third_game_type,
                 excluded_games=[
@@ -149,7 +164,8 @@ class RandomizerService:
 
         # fourth game
         if fourth_fysm_level and fourth_game_type:
-            game, mode = self._get_random_game_and_mode(
+            game, mode = await self._get_random_game_and_mode(
+                user_id,
                 fourth_fysm_level,
                 fourth_game_type,
                 excluded_games=[

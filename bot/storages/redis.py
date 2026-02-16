@@ -47,6 +47,31 @@ class RedisStorage(BaseStorage):
         logger.info('Closing RedisStorage connection...')
         await self.redis.close()
 
+    async def get_unique_game_for_user(
+        self,
+        user_id: int,
+        fysm_level: str,
+        game_type: str,
+        default_games: list[str],
+        excluded_games: list[str],
+    ) -> str:
+        async def _pop_game() -> str | None:
+            key = f'{user_id}:{fysm_level}:{game_type}'
+            item = await self.redis.spop(key)
+
+            if item is None:
+                await self.redis.sadd(key, *default_games)
+                await self.redis.expire(key, 60 * 60 * 24 * 7)
+                item = await self.redis.spop(key)
+
+            return item if item not in excluded_games else None
+
+        game = None
+        while game is None:
+            game = await _pop_game()
+
+        return game
+
     @staticmethod
     def _build_key(func, args: tuple, kwargs: dict) -> str:
         return f'{func.__module__}:{func.__name__}:{args}:{kwargs}'

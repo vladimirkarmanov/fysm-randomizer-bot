@@ -42,7 +42,7 @@ async def fysm_level_callback(
     db_session: AsyncSession,
 ):
     fysm_level = callback_data.fysm_level
-    text = RandomizerService().get_full_random_practice(fysm_level=fysm_level)
+    text = await RandomizerService().get_full_random_practice(user_id=callback.from_user.id, fysm_level=fysm_level)
 
     if isinstance(callback.message, types.Message):
         await update_text_message(message=callback.message, new_value=text, keyboard=None)
