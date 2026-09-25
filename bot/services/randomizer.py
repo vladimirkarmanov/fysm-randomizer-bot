@@ -6,6 +6,7 @@ from constants.fysm import (
     core_practice_modes,
     core_practice_modules,
     games_by_level,
+    practice_setting,
     zero_games,
     zero_modes,
     zero_modules,
@@ -27,6 +28,12 @@ class Zero:
 class RandomizerService:
     def __init__(self):
         self.storage = container.resolve(BaseStorage)
+
+    def _get_random_eyes_settings(self) -> list[str]:
+        return random.sample(
+            population=practice_setting['eyes_techniques'],
+            k=random.randint(1, 4),
+        )
 
     def _get_random_zero(self, module_name: str) -> Zero:
         mode = random.choices(
@@ -93,7 +100,10 @@ class RandomizerService:
 
         core_practice_text = '\n'.join([f'{game} - {mode}' for game, mode in core_practice])
 
+        eyes_techniques = self._get_random_eyes_settings()
+
         text = (
+            f'<b>Глазные техники:</b>\n{"\n".join(eyes_techniques)}\n\n'
             f'<b>Включение:</b>\n{zero.game}\n'
             f'Режим: {zero.mode}{zero.note}\n\n'
             f'<b>Основная часть:</b>\n{core_practice_text}'
@@ -181,9 +191,12 @@ class RandomizerService:
 
         core_practice_text = '\n'.join([f'{v["game"]} - {v["mode"]}' for _, v in core_practice.items()])
 
+        eyes_techniques = self._get_random_eyes_settings()
+
         text = (
+            f'<b>Глазные техники:</b>\n{"\n".join(eyes_techniques)}\n\n'
             f'<b>Включение:</b>\n{zero.game}\n'
             f'Режим: {zero.mode}{zero.note}\n\n'
-            f'<b>Основная часть:</b>\n{core_practice_text}'
+            f'<b>Основная часть:</b>\n{core_practice_text}\n\n'
         )
         return text
